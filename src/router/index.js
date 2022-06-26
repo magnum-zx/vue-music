@@ -13,6 +13,25 @@ const routes = [
       savePosition: true,
     },
   },
+  {
+    path: '/explore',
+    name: 'explore',
+    component: () => import('@/views/home.vue'),
+    meta: {
+      keepAlive: true,
+      savePosition: true,
+    },
+  },
+  {
+    path: '/library',
+    name: 'library',
+    component: () => import('@/views/home.vue'),
+    meta: {
+      requireLogin: true,
+      keepAlive: true,
+      savePosition: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
