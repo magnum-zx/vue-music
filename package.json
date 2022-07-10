@@ -10,6 +10,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.18.6",
     "@unblockneteasemusic/rust-napi": "^0.3.0-pre.1",
     "NeteaseCloudMusicApi": "^4.5.2",
     "axios": "^0.26.1",
