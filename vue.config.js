@@ -33,6 +33,7 @@ module.exports = {
     //   swSrc: "dev/sw.js",
     // },
   },
+  // 用于多页配置
   pages: {
     index: {
       entry: 'src/main.js',

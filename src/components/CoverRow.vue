@@ -6,21 +6,43 @@
       class="item"
       :class="{ artist: type === 'artist' }"
     >
-      <!-- <Cover
+      <Cover
         :id="item.id"
         :img-url="getImageUrl(item)"
         :type="type"
         :play-button-size="type === 'artist' ? 26 : playButtonSize"
-      /> -->
+      />
+      <div class="text">
+        <div v-if="showPlayCount" class="info">
+          <span class="play-count"
+            ><svg-icon icon-class="play" />{{
+              item.playCount | formatPlayCount
+            }}
+          </span>
+        </div>
+        <div class="title" :style="{ fontSize: subTextFontSize }">
+          <span v-if="isExplicit(item)" class="explicit-symbol">
+            <!-- <ExplicitSymbol/> -->
+          </span>
+          <span v-if="isPrivacy(item)" class="lock-icon">
+            <svg-icon icon-class="lock"
+          /></span>
+          <router-link :to="getTitleLink(item)">{{ item.name }}</router-link>
+        </div>
+        <div v-if="type !== 'artist' && subText !== 'none'" class="info">
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <span v-html="getSubText(item)"></span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
-// import Cover from './Cover.vue';
+import Cover from '@/components/Cover.vue';
 export default {
   name: 'CoverRow',
   components: {
-    // Cover,
+    Cover,
   },
   props: {
     items: { type: Array, required: true },
@@ -45,7 +67,48 @@ export default {
       };
     },
   },
+
+  mounted() {
+    console.log(this.items);
+  },
   methods: {
+    getSubText(item) {
+      if (this.subText === 'copywriter') return item.copywriter;
+      if (this.subText === 'description') return item.description;
+      if (this.subText === 'updateFrequency') return item.updateFrequency;
+      if (this.subText === 'creator') return 'by ' + item.creator.nickname;
+      if (this.subText === 'releaseYear')
+        return new Date(item.publishTime).getFullYear();
+      if (this.subText === 'artist') {
+        if (item.artist !== undefined)
+          return `<a href="/#/artist/${item.artist.id}">${item.artist.name}</a>`;
+        if (item.artists !== undefined)
+          return `<a href="/#/artist/${item.artists[0].id}">${item.artists[0].name}</a>`;
+      }
+      if (this.subText === 'albumType+releaseYear') {
+        let albumType = item.type;
+        if (item.type === 'EP/Single') {
+          albumType = item.size === 1 ? 'Single' : 'EP';
+        } else if (item.type === 'Single') {
+          albumType = 'Single';
+        } else if (item.type === '专辑') {
+          albumType = 'Album';
+        }
+        return `${albumType} · ${new Date(item.publishTime).getFullYear()}`;
+      }
+      if (this.subText === 'appleMusic') return 'by Apple Music';
+    },
+
+    isPrivacy(item) {
+      return this.type === 'playlist' && item.privacy === 10;
+    },
+    isExplicit(item) {
+      return this.type === 'album' && item.mark === 1056768;
+    },
+    getTitleLink(item) {
+      return `/${this.type}/${item.id}`;
+    },
+
     getImageUrl(item) {
       if (item.img1v1Url) {
         let img1v1ID = item.img1v1Url.split('/');
@@ -56,7 +119,7 @@ export default {
         }
       }
       let img = item.img1v1Url || item.picUrl || item.coverImgUrl;
-      return `${img.replace('http://', 'https://')}?param=512y512`;
+      return `${img?.replace('http://', 'https://')}?param=512y512`;
     },
   },
 };
