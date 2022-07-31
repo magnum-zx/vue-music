@@ -14,6 +14,20 @@ const routes = [
     },
   },
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login.vue'),
+    meta: {
+      keepAlive: true,
+      savePosition: true,
+    },
+  },
+  {
+    path: '/login/account',
+    name: 'loginAccount',
+    component: () => import('@/views/loginAccount.vue'),
+  },
+  {
     path: '/explore',
     name: 'explore',
     component: () => import('@/views/home.vue'),

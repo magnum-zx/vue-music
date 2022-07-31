@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 import { logout } from '@/api/auth';
 import store from '@/store';
 
+// cookie持久化于本地localStorage
 export function setCookies(string) {
   const cookies = string.split(';;');
   cookies.map(cookie => {
