@@ -116,7 +116,9 @@ export default {
   },
   methods: {
     ...mapMutations(['togglePlaylistCategory']),
+
     loadData() {
+      // debugger;
       setTimeout(() => {
         if (!this.show) NProgress.start();
       }, 1000);

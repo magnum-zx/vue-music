@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-// import { mapTrackPlayableStatus } from '@/utils/common';
+import { mapTrackPlayableStatus } from '@/utils/common';
 
 /**
  * 推荐歌单
@@ -42,23 +42,23 @@ export function dailyRecommendPlaylist(params) {
  * @param {number} id
  * @param {boolean=} noCache
  */
-// export function getPlaylistDetail(id, noCache = false) {
-//   let params = { id };
-//   if (noCache) params.timestamp = new Date().getTime();
-//   return request({
-//     url: '/playlist/detail',
-//     method: 'get',
-//     params,
-//   }).then(data => {
-//     if (data.playlist) {
-//       data.playlist.tracks = mapTrackPlayableStatus(
-//         data.playlist.tracks,
-//         data.privileges || []
-//       );
-//     }
-//     return data;
-//   });
-// }
+export function getPlaylistDetail(id, noCache = false) {
+  let params = { id };
+  if (noCache) params.timestamp = new Date().getTime();
+  return request({
+    url: '/playlist/detail',
+    method: 'get',
+    params,
+  }).then(data => {
+    if (data.playlist) {
+      data.playlist.tracks = mapTrackPlayableStatus(
+        data.playlist.tracks,
+        data.privileges || []
+      );
+    }
+    return data;
+  });
+}
 /**
  * 获取精品歌单
  * 说明 : 调用此接口 , 可获取精品歌单
@@ -196,19 +196,19 @@ export function addOrRemoveTrackFromPlaylist(params) {
  * @param {string} params.op
  * @param {string} params.pid
  */
-// export function dailyRecommendTracks() {
-//   return request({
-//     url: '/recommend/songs',
-//     method: 'get',
-//     params: { timestamp: new Date().getTime() },
-//   }).then(result => {
-//     result.data.dailySongs = mapTrackPlayableStatus(
-//       result.data.dailySongs,
-//       result.data.privileges
-//     );
-//     return result;
-//   });
-// }
+export function dailyRecommendTracks() {
+  return request({
+    url: '/recommend/songs',
+    method: 'get',
+    params: { timestamp: new Date().getTime() },
+  }).then(result => {
+    result.data.dailySongs = mapTrackPlayableStatus(
+      result.data.dailySongs,
+      result.data.privileges
+    );
+    return result;
+  });
+}
 
 /**
  * 心动模式/智能播放

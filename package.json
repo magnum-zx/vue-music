@@ -94,7 +94,9 @@
     "rules": {
       "no-unused-vars": [
         "warn"
-      ]
+      ],
+      "no-debugger": "off",
+      "no-console": "off"
     }
   },
   "browserslist": [

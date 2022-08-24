@@ -12,37 +12,37 @@
       </keep-alive>
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </main>
-    <!-- <transition name="slide-up">
+    <transition name="slide-up">
       <Player v-if="enablePlayer" v-show="showPlayer" ref="player" />
-    </transition> -->
+    </transition>
     <Toast />
-    <!-- <ModalAddTrackToPlaylist v-if="isAccountLoggedIn" />
-    <ModalNewPlaylist v-if="isAccountLoggedIn" /> -->
-    <!-- <transition v-if="enablePlayer" name="slide-up">
+    <ModalAddTrackToPlaylist v-if="isAccountLoggedIn" />
+    <ModalNewPlaylist v-if="isAccountLoggedIn" />
+    <transition v-if="enablePlayer" name="slide-up">
       <Lyrics v-show="showLyrics" />
-    </transition> -->
+    </transition>
   </div>
 </template>
 
 <script>
-// import ModalAddTrackToPlaylist from './components/ModalAddTrackToPlaylist.vue';
-// import ModalNewPlaylist from './components/ModalNewPlaylist.vue';
+import ModalAddTrackToPlaylist from './components/ModalAddTrackToPlaylist.vue';
+import ModalNewPlaylist from './components/ModalNewPlaylist.vue';
 import Scrollbar from '@/components/Scrollbar.vue';
 import Navbar from '@/components/Navbar.vue';
-// import Player from './components/Player.vue';
+import Player from './components/Player.vue';
 import Toast from '@/components/Toast.vue';
 import { isAccountLoggedIn, isLooseLoggedIn } from '@/utils/auth';
-// import Lyrics from './views/lyrics.vue';
+import Lyrics from './views/lyrics.vue';
 import { mapState } from 'vuex';
 export default {
   name: 'App',
   components: {
     Navbar,
-    // Player,
+    Player,
     Toast,
-    // ModalAddTrackToPlaylist,
-    // ModalNewPlaylist,
-    // Lyrics,
+    ModalAddTrackToPlaylist,
+    ModalNewPlaylist,
+    Lyrics,
     Scrollbar,
   },
   data() {
@@ -75,18 +75,18 @@ export default {
   },
   created() {
     // if (this.isElectron) ipcRenderer(this);
-    // window.addEventListener('keydown', this.handleKeydown);
+    window.addEventListener('keydown', this.handleKeydown);
     this.fetchData();
   },
   methods: {
-    // handleKeydown(e) {
-    //   if (e.code === 'Space') {
-    //     if (e.target.tagName === 'INPUT') return false;
-    //     if (this.$route.name === 'mv') return false;
-    //     e.preventDefault();
-    //     this.player.playOrPause();
-    //   }
-    // },
+    handleKeydown(e) {
+      if (e.code === 'Space') {
+        if (e.target.tagName === 'INPUT') return false;
+        if (this.$route.name === 'mv') return false;
+        e.preventDefault();
+        this.player.playOrPause();
+      }
+    },
     fetchData() {
       if (!isLooseLoggedIn()) return;
       this.$store.dispatch('fetchLikedSongs');

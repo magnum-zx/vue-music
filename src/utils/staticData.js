@@ -37,21 +37,21 @@ export const playlistCategories = [
     enable: true,
     bigCat: 'static',
   },
-  // {
-  //   name: "For You",
-  //   enable: true,
-  //   bigCat: "static",
-  // },
+  {
+    name: 'For You',
+    enable: true,
+    bigCat: 'static',
+  },
   {
     name: '推荐歌单',
     enable: true,
     bigCat: 'static',
   },
-  // {
-  //   name: "最新专辑",
-  //   enable: false,
-  //   bigCat: "static",
-  // },
+  {
+    name: '最新专辑',
+    enable: false,
+    bigCat: 'static',
+  },
   {
     name: '精品歌单',
     enable: true,

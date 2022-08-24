@@ -1,11 +1,10 @@
-// import { playlistCategories } from '@/utils/staticData';
-// import shortcuts from '@/utils/shortcuts';
+import { playlistCategories } from '@/utils/staticData';
+import shortcuts from '@/utils/shortcuts';
 
 console.debug('[debug][initLocalStorage.js]');
-// const enabledPlaylistCategories = playlistCategories
-//   .filter(c => c.enable)
-//   .map(c => c.name);
-
+const enabledPlaylistCategories = playlistCategories
+  .filter(c => c.enable)
+  .map(c => c.name);
 let localStorage = {
   player: {},
   settings: {
@@ -29,13 +28,13 @@ let localStorage = {
     showLibraryDefault: false,
     subTitleDefault: false,
     linuxEnableCustomTitlebar: false,
-    // enabledPlaylistCategories,
+    enabledPlaylistCategories: enabledPlaylistCategories,
     proxyConfig: {
       protocol: 'noProxy',
       server: '',
       port: null,
     },
-    // shortcuts: shortcuts,
+    shortcuts: shortcuts,
   },
   data: {
     user: {},
