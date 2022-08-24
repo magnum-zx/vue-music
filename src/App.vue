@@ -17,7 +17,7 @@
     </transition>
     <Toast />
     <ModalAddTrackToPlaylist v-if="isAccountLoggedIn" />
-    <ModalNewPlaylist v-if="isAccountLoggedIn" />
+    <ModalNewPlaylist v-if="isAccountLoggedIn" /> -->
     <transition v-if="enablePlayer" name="slide-up">
       <Lyrics v-show="showLyrics" />
     </transition>
@@ -27,10 +27,10 @@
 <script>
 import ModalAddTrackToPlaylist from './components/ModalAddTrackToPlaylist.vue';
 import ModalNewPlaylist from './components/ModalNewPlaylist.vue';
-import Scrollbar from '@/components/Scrollbar.vue';
-import Navbar from '@/components/Navbar.vue';
+import Scrollbar from './components/Scrollbar.vue';
+import Navbar from './components/Navbar.vue';
 import Player from './components/Player.vue';
-import Toast from '@/components/Toast.vue';
+import Toast from './components/Toast.vue';
 import { isAccountLoggedIn, isLooseLoggedIn } from '@/utils/auth';
 import Lyrics from './views/lyrics.vue';
 import { mapState } from 'vuex';
