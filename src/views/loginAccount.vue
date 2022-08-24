@@ -110,7 +110,7 @@ import md5 from 'crypto-js/md5';
 import NProgress from 'nprogress';
 import { mapMutations } from 'vuex';
 import { setCookies } from '@/utils/auth';
-// import nativeAlert from '@/utils/nativeAlert';
+// import console.log from '@/utils/console.log';
 import {
   loginWithPhone,
   loginWithEmail,
@@ -154,7 +154,7 @@ export default {
         this.phone === '' ||
         this.password === ''
       ) {
-        // nativeAlert('国家区号或手机号不正确');
+        console.log('国家区号或手机号不正确');
         this.isLogging = false;
         return false;
       }
@@ -168,7 +168,7 @@ export default {
         this.password === '' ||
         !emailReg.test(this.email)
       ) {
-        // nativeAlert('邮箱不正确');
+        console.log('邮箱不正确');
         return false;
       }
       return true;
@@ -189,7 +189,7 @@ export default {
           .catch(error => {
             this.isLogging = false;
             console.log(error);
-            // nativeAlert(`发生错误，请检查你的账号密码是否正确\n${error}`);
+            console.log(`发生错误，请检查你的账号密码是否正确\n${error}`);
           });
       } else {
         this.isLogging = this.validateEmail();
@@ -203,7 +203,7 @@ export default {
           .catch(error => {
             this.isLogging = false;
             console.log(error);
-            // nativeAlert(`发生错误，请检查你的账号密码是否正确\n${error}`);
+            console.log(`发生错误，请检查你的账号密码是否正确\n${error}`);
           });
       }
     },
@@ -228,7 +228,7 @@ export default {
         });
       } else {
         this.isLogging = false;
-        // nativeAlert(data.msg ?? data.message ?? '账号或密码错误，请检查');
+        console.log(data.msg ?? data.message ?? '账号或密码错误，请检查');
         console.log('error');
       }
     },

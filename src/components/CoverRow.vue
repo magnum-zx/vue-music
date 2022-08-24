@@ -1,5 +1,5 @@
 <template>
-  <div class="cover-row">
+  <div class="cover-row" :style="rowStyles">
     <div
       v-for="item in items"
       :key="item.id"
@@ -21,29 +21,33 @@
           </span>
         </div>
         <div class="title" :style="{ fontSize: subTextFontSize }">
-          <span v-if="isExplicit(item)" class="explicit-symbol">
-            <!-- <ExplicitSymbol/> -->
-          </span>
+          <span v-if="isExplicit(item)" class="explicit-symbol"
+            ><ExplicitSymbol
+          /></span>
           <span v-if="isPrivacy(item)" class="lock-icon">
             <svg-icon icon-class="lock"
           /></span>
           <router-link :to="getTitleLink(item)">{{ item.name }}</router-link>
         </div>
         <div v-if="type !== 'artist' && subText !== 'none'" class="info">
-          <!-- eslint-disable-next-line vue/no-v-html -->
           <span v-html="getSubText(item)"></span>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import Cover from '@/components/Cover.vue';
+import ExplicitSymbol from '@/components/ExplicitSymbol.vue';
+
 export default {
   name: 'CoverRow',
   components: {
     Cover,
+    ExplicitSymbol,
   },
+
   props: {
     items: { type: Array, required: true },
     type: { type: String, required: true },
@@ -55,19 +59,14 @@ export default {
     playButtonSize: { type: Number, default: 22 },
   },
 
-  data() {
-    return {};
-  },
-
   computed: {
-    rowStyle() {
+    rowStyles() {
       return {
         'grid-template-columns': `repeat(${this.columnNumber}, 1fr)`,
         gap: this.gap,
       };
     },
   },
-
   mounted() {
     console.log(this.items);
   },
@@ -108,23 +107,25 @@ export default {
     getTitleLink(item) {
       return `/${this.type}/${item.id}`;
     },
-
     getImageUrl(item) {
       if (item.img1v1Url) {
         let img1v1ID = item.img1v1Url.split('/');
         img1v1ID = img1v1ID[img1v1ID.length - 1];
         if (img1v1ID === '5639395138885805.jpg') {
-          // 没有头像的歌手，网易云返回的img1v1Url并不是正方形的
+          // 没有头像的歌手，网易云返回的img1v1Url并不是正方形的 😅😅😅
           return 'https://p2.music.126.net/VnZiScyynLG7atLIZ2YPkw==/18686200114669622.jpg?param=512y512';
         }
       }
       let img = item.img1v1Url || item.picUrl || item.coverImgUrl;
-      return `${img?.replace('http://', 'https://')}?param=512y512`;
+      // eslint-disable-next-line no-debugger
+      img = `${img?.replace('http://', 'https://')}?param=512y512`;
+      return img;
     },
   },
 };
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped>
 .cover-row {
   display: grid;
 }

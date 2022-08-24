@@ -50,6 +50,8 @@ export default {
   },
   computed: {
     imageStyles() {
+      // eslint-disable-next-line no-debugger
+      // debugger;
       let styles = {};
       if (this.fixedSize !== 0) {
         styles.width = this.fixedSize + 'px';
@@ -67,6 +69,7 @@ export default {
     shadowStyles() {
       let styles = {};
       styles.backgroundImage = `url(${this.imgUrl})`;
+
       if (this.type === 'artist') styles.borderRadius = '50%';
       return styles;
     },

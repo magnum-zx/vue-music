@@ -1,20 +1,107 @@
 <template>
   <div id="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-    <NavBar />
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    <router-view></router-view>
+    <Scrollbar v-show="!showLyrics" ref="scrollbar" />
+    <Navbar v-show="showNavbar" ref="navbar" />
+    <main
+      ref="main"
+      :style="{ overflow: enableScrolling ? 'auto' : 'hidden' }"
+      @scroll="handleScroll"
+    >
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </main>
+    <!-- <transition name="slide-up">
+      <Player v-if="enablePlayer" v-show="showPlayer" ref="player" />
+    </transition> -->
+    <Toast />
+    <!-- <ModalAddTrackToPlaylist v-if="isAccountLoggedIn" />
+    <ModalNewPlaylist v-if="isAccountLoggedIn" /> -->
+    <!-- <transition v-if="enablePlayer" name="slide-up">
+      <Lyrics v-show="showLyrics" />
+    </transition> -->
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue';
-import NavBar from './components/NavBar.vue';
+// import ModalAddTrackToPlaylist from './components/ModalAddTrackToPlaylist.vue';
+// import ModalNewPlaylist from './components/ModalNewPlaylist.vue';
+import Scrollbar from '@/components/Scrollbar.vue';
+import Navbar from '@/components/Navbar.vue';
+// import Player from './components/Player.vue';
+import Toast from '@/components/Toast.vue';
+import { isAccountLoggedIn, isLooseLoggedIn } from '@/utils/auth';
+// import Lyrics from './views/lyrics.vue';
+import { mapState } from 'vuex';
 export default {
   name: 'App',
   components: {
-    // HelloWorld,
-    NavBar,
+    Navbar,
+    // Player,
+    Toast,
+    // ModalAddTrackToPlaylist,
+    // ModalNewPlaylist,
+    // Lyrics,
+    Scrollbar,
+  },
+  data() {
+    return {
+      userSelectNone: false,
+    };
+  },
+  computed: {
+    ...mapState(['showLyrics', 'settings', 'player', 'enableScrolling']),
+    isAccountLoggedIn() {
+      return isAccountLoggedIn();
+    },
+    showPlayer() {
+      return (
+        [
+          'mv',
+          'loginUsername',
+          'login',
+          'loginAccount',
+          'lastfmCallback',
+        ].includes(this.$route.name) === false
+      );
+    },
+    enablePlayer() {
+      return this.player.enabled && this.$route.name !== 'lastfmCallback';
+    },
+    showNavbar() {
+      return this.$route.name !== 'lastfmCallback';
+    },
+  },
+  created() {
+    // if (this.isElectron) ipcRenderer(this);
+    // window.addEventListener('keydown', this.handleKeydown);
+    this.fetchData();
+  },
+  methods: {
+    // handleKeydown(e) {
+    //   if (e.code === 'Space') {
+    //     if (e.target.tagName === 'INPUT') return false;
+    //     if (this.$route.name === 'mv') return false;
+    //     e.preventDefault();
+    //     this.player.playOrPause();
+    //   }
+    // },
+    fetchData() {
+      if (!isLooseLoggedIn()) return;
+      this.$store.dispatch('fetchLikedSongs');
+      this.$store.dispatch('fetchLikedSongsWithDetails');
+      this.$store.dispatch('fetchLikedPlaylist');
+      if (isAccountLoggedIn()) {
+        this.$store.dispatch('fetchLikedAlbums');
+        this.$store.dispatch('fetchLikedArtists');
+        this.$store.dispatch('fetchLikedMVs');
+        this.$store.dispatch('fetchCloudDisk');
+      }
+    },
+    handleScroll() {
+      this.$refs.scrollbar.handleScroll();
+    },
   },
 };
 </script>
