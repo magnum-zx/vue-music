@@ -8,13 +8,13 @@ const enabledPlaylistCategories = playlistCategories
 let localStorage = {
   player: {},
   settings: {
-    lang: null,
+    lang: 'en', //'en' 'zh-CN', 'zh-TW'
     musicLanguage: 'all',
-    appearance: 'auto',
+    appearance: 'dark', // 'light', 'auto', 'dark'
     musicQuality: 320000,
     lyricFontSize: 28,
     outputDevice: 'default',
-    showPlaylistsByAppleMusic: true,
+    showPlaylistsByAppleMusic: false, // 是否显示apple推荐
     enableUnblockNeteaseMusic: true,
     automaticallyCacheSongs: true,
     cacheLimit: 8192,
