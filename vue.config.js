@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 const webpack = require('webpack');
 const path = require('path');
 function resolve(dir) {
@@ -44,6 +45,22 @@ module.exports = {
     },
   },
   chainWebpack(config) {
+    // 分析分包大小
+    if (process.env.npm_config_report) {
+      config
+        .plugin('webpack-bundle-analyzer')
+        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+        .end();
+    }
+    //忽略的打包文件
+    // config.externals({
+    //   vue: 'Vue',
+    //   'vue-router': 'VueRouter',
+    //   vuex: 'Vuex',
+    //   axios: 'axios',
+    //   lodash: 'lodash',
+    // });
+
     config.resolve.alias.set('@', resolve('src')); // key,value自行定义，比如.set('@@', resolve('src/components'))
     config.module.rules.delete('svg');
     config.module.rule('svg').exclude.add(resolve('src/assets/icons')).end();

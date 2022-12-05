@@ -265,6 +265,7 @@ export default {
         this.checkQrCodeLogin();
       });
     },
+
     checkQrCodeLogin() {
       this.qrCodeCheckInterval = setInterval(() => {
         if (this.qrCodeKey === '') return;

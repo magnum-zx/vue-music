@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "prettier": "npx prettier --write ./src"
+    "prettier": "npx prettier --write ./src",
+    "report": "set npm_config_report=true && vue-cli-service build"
   },
   "main": "background.js",
   "dependencies": {
@@ -67,7 +68,8 @@
     "husky": "^4.3.0",
     "sass": "^1.26.11",
     "sass-loader": "^10.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.11",
+    "webpack-bundle-analyzer": "^4.6.1"
   },
   "resolutions": {
     "icon-gen": "3.0.0",
