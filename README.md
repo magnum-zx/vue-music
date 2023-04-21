@@ -1,4 +1,5 @@
 # vue-music
+A music website implemented by Vue2 framework
 
 ## Project setup
 ```
