@@ -7,15 +7,11 @@ import { changeAppearance } from '@/utils/common';
 import Player from '@/utils/Player';
 // vuex 自定义插件
 import saveToLocalStorage from './plugins/localStorage';
-import { getSendSettingsPlugin } from './plugins/sendSettings';
 
 Vue.use(Vuex);
 
 let plugins = [saveToLocalStorage];
-if (process.env.IS_ELECTRON === true) {
-  let sendSettings = getSendSettingsPlugin();
-  plugins.push(sendSettings);
-}
+
 const options = {
   state,
   mutations,
@@ -54,11 +50,10 @@ window
 let player = new Player();
 player = new Proxy(player, {
   set(target, prop, val) {
-    // console.log({ prop, val });
     target[prop] = val;
     if (prop === '_howler') return true;
     target.saveSelfToLocalStorage();
-    target.sendSelfToIpcMain();
+    // target.sendSelfToIpcMain();
     return true;
   },
 });

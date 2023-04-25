@@ -94,77 +94,6 @@
           </select>
         </div>
       </div>
-      <div v-if="isElectron" class="item">
-        <div class="left">
-          <div class="title"> {{ $t('settings.deviceSelector') }} </div>
-        </div>
-        <div class="right">
-          <select v-model="outputDevice">
-            <option
-              v-for="device in allOutputDevices"
-              :key="device.deviceId"
-              :value="device.deviceId"
-              :selected="device.deviceId == outputDevice"
-            >
-              {{ $t(device.label) }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <h3 v-if="isElectron">缓存</h3>
-      <div v-if="isElectron" class="item">
-        <div class="left">
-          <div class="title">
-            {{ $t('settings.automaticallyCacheSongs') }}
-          </div>
-        </div>
-        <div class="right">
-          <div class="toggle">
-            <input
-              id="automatically-cache-songs"
-              v-model="automaticallyCacheSongs"
-              type="checkbox"
-              name="automatically-cache-songs"
-            />
-            <label for="automatically-cache-songs"></label>
-          </div>
-        </div>
-      </div>
-      <div v-if="isElectron" class="item">
-        <div class="left">
-          <div class="title"> {{ $t('settings.cacheLimit.text') }} </div>
-        </div>
-        <div class="right">
-          <select v-model="cacheLimit">
-            <option :value="false">
-              {{ $t('settings.cacheLimit.none') }}
-            </option>
-            <option :value="512"> 500MB </option>
-            <option :value="1024"> 1GB </option>
-            <option :value="2048"> 2GB </option>
-            <option :value="4096"> 4GB </option>
-            <option :value="8192"> 8GB </option>
-          </select>
-        </div>
-      </div>
-      <div v-if="isElectron" class="item">
-        <div class="left">
-          <div class="title">
-            {{
-              $t('settings.cacheCount', {
-                song: tracksCache.length,
-                size: tracksCache.size,
-              })
-            }}</div
-          >
-        </div>
-        <div class="right">
-          <button @click="clearCache()">
-            {{ $t('settings.clearSongsCache') }}
-          </button>
-        </div>
-      </div>
 
       <h3>歌词</h3>
       <div class="item">
@@ -240,174 +169,6 @@
         </div>
       </div>
 
-      <section v-if="isElectron" class="unm-configuration">
-        <h3>UnblockNeteaseMusic</h3>
-        <div class="item">
-          <div class="left">
-            <div class="title"
-              >{{ $t('settings.unm.enable') }}
-              <a
-                href="https://github.com/UnblockNeteaseMusic/server"
-                target="blank"
-                >UnblockNeteaseMusic</a
-              ></div
-            >
-          </div>
-          <div class="right">
-            <div class="toggle">
-              <input
-                id="enable-unblock-netease-music"
-                v-model="enableUnblockNeteaseMusic"
-                type="checkbox"
-                name="enable-unblock-netease-music"
-              />
-              <label for="enable-unblock-netease-music"></label>
-            </div>
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <div class="title">
-              {{ $t('settings.unm.audioSource.title') }}
-            </div>
-            <div class="description">
-              音源的具体代号
-              <a
-                href="https://github.com/UnblockNeteaseMusic/server-rust/blob/main/README.md#支援的所有引擎"
-                target="_blank"
-              >
-                可以点此到 UNM 的说明页面查询。 </a
-              ><br />
-              多个音源请用 <code>,</code> 逗号分隔。<br />
-              留空则使用 UNM 内置的默认值。
-            </div>
-          </div>
-          <div class="right">
-            <input
-              v-model="unmSource"
-              class="text-input margin-right-0"
-              placeholder="例 bilibili, kuwo"
-            />
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <div class="title"> {{ $t('settings.unm.enableFlac.title') }} </div>
-            <div class="description">
-              {{ $t('settings.unm.enableFlac.desc') }}
-            </div>
-          </div>
-          <div class="right">
-            <div class="toggle">
-              <input
-                id="unm-enable-flac"
-                v-model="unmEnableFlac"
-                type="checkbox"
-              />
-              <label for="unm-enable-flac" />
-            </div>
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <div class="title"> {{ $t('settings.unm.searchMode.title') }} </div>
-          </div>
-          <div class="right">
-            <select v-model="unmSearchMode">
-              <option value="fast-first">
-                {{ $t('settings.unm.searchMode.fast') }}
-              </option>
-              <option value="order-first">
-                {{ $t('settings.unm.searchMode.order') }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <div class="title">{{ $t('settings.unm.cookie.joox') }}</div>
-            <div class="description">
-              <a
-                href="https://github.com/UnblockNeteaseMusic/server-rust/tree/main/engines#joox-cookie-設定說明"
-                target="_blank"
-                >{{ $t('settings.unm.cookie.desc1') }}
-              </a>
-              {{ $t('settings.unm.cookie.desc2') }}
-            </div>
-          </div>
-          <div class="right">
-            <input
-              v-model="unmJooxCookie"
-              class="text-input margin-right-0"
-              placeholder="wmid=..; session_key=.."
-            />
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <div class="title"> {{ $t('settings.unm.cookie.qq') }} </div>
-            <div class="description">
-              <a
-                href="https://github.com/UnblockNeteaseMusic/server-rust/tree/main/engines#qq-cookie-設定說明"
-                target="_blank"
-                >{{ $t('settings.unm.cookie.desc1') }}
-              </a>
-              {{ $t('settings.unm.cookie.desc2') }}
-            </div>
-          </div>
-          <div class="right">
-            <input
-              v-model="unmQQCookie"
-              class="text-input margin-right-0"
-              placeholder="uin=..; qm_keyst=..;"
-            />
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <div class="title"> {{ $t('settings.unm.ytdl') }} </div>
-            <div class="description">
-              <a
-                href="https://github.com/UnblockNeteaseMusic/server-rust/tree/main/engines#ytdlexe-設定說明"
-                target="_blank"
-                >{{ $t('settings.unm.cookie.desc1') }}
-              </a>
-              {{ $t('settings.unm.cookie.desc2') }}
-            </div>
-          </div>
-          <div class="right">
-            <input
-              v-model="unmYtDlExe"
-              class="text-input margin-right-0"
-              placeholder="ex. youtube-dl"
-            />
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="left">
-            <div class="title"> {{ $t('settings.unm.proxy.title') }} </div>
-            <div class="description">
-              {{ $t('settings.unm.proxy.desc1') }}<br />
-              {{ $t('settings.unm.proxy.desc2') }}
-            </div>
-          </div>
-          <div class="right">
-            <input
-              v-model="unmProxyUri"
-              class="text-input margin-right-0"
-              placeholder="ex. https://192.168.11.45"
-            />
-          </div>
-        </div>
-      </section>
-
       <h3>第三方</h3>
       <div class="item">
         <div class="left">
@@ -426,78 +187,8 @@
           <button v-else @click="lastfmConnect()"> 授权连接 </button>
         </div>
       </div>
-      <div v-if="isElectron" class="item">
-        <div class="left">
-          <div class="title">
-            {{ $t('settings.enableDiscordRichPresence') }}</div
-          >
-        </div>
-        <div class="right">
-          <div class="toggle">
-            <input
-              id="enable-discord-rich-presence"
-              v-model="enableDiscordRichPresence"
-              type="checkbox"
-              name="enable-discord-rich-presence"
-            />
-            <label for="enable-discord-rich-presence"></label>
-          </div>
-        </div>
-      </div>
 
       <h3>其他</h3>
-      <div v-if="isElectron && !isMac" class="item">
-        <div class="left">
-          <div class="title"> {{ $t('settings.closeAppOption.text') }} </div>
-        </div>
-        <div class="right">
-          <select v-model="closeAppOption">
-            <option value="ask">
-              {{ $t('settings.closeAppOption.ask') }}
-            </option>
-            <option value="exit">
-              {{ $t('settings.closeAppOption.exit') }}
-            </option>
-            <option value="minimizeToTray">
-              {{ $t('settings.closeAppOption.minimizeToTray') }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div v-if="isElectron && isLinux" class="item">
-        <div class="left">
-          <div class="title"> {{ $t('settings.enableCustomTitlebar') }} </div>
-        </div>
-        <div class="right">
-          <div class="toggle">
-            <input
-              id="enable-custom-titlebar"
-              v-model="enableCustomTitlebar"
-              type="checkbox"
-              name="enable-custom-titlebar"
-            />
-            <label for="enable-custom-titlebar"></label>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="isElectron" class="item">
-        <div class="left">
-          <div class="title"> {{ $t('settings.showLibraryDefault') }}</div>
-        </div>
-        <div class="right">
-          <div class="toggle">
-            <input
-              id="show-library-default"
-              v-model="showLibraryDefault"
-              type="checkbox"
-              name="show-library-default"
-            />
-            <label for="show-library-default"></label>
-          </div>
-        </div>
-      </div>
 
       <div class="item">
         <div class="left">
@@ -569,135 +260,14 @@
         </div>
       </div>
 
-      <div v-if="isElectron">
-        <h3>代理</h3>
-        <div class="item">
-          <div class="left">
-            <div class="title"> 代理协议 </div>
-          </div>
-          <div class="right">
-            <select v-model="proxyProtocol">
-              <option value="noProxy"> 关闭代理 </option>
-              <option value="HTTP"> HTTP 代理 </option>
-              <option value="HTTPS"> HTTPS 代理 </option>
-              <!-- <option value="SOCKS"> SOCKS 代理 </option> -->
-            </select>
-          </div>
-        </div>
-        <div id="proxy-form" :class="{ disabled: proxyProtocol === 'noProxy' }">
-          <input
-            v-model="proxyServer"
-            class="text-input"
-            placeholder="服务器地址"
-            :disabled="proxyProtocol === 'noProxy'"
-          /><input
-            v-model="proxyPort"
-            class="text-input"
-            placeholder="端口"
-            type="number"
-            min="1"
-            max="65535"
-            :disabled="proxyProtocol === 'noProxy'"
-          />
-          <button @click="sendProxyConfig">更新代理</button>
-        </div>
-      </div>
-
-      <div v-if="isElectron">
-        <h3>快捷键</h3>
-        <div class="item">
-          <div class="left">
-            <div class="title"> {{ $t('settings.enableGlobalShortcut') }}</div>
-          </div>
-          <div class="right">
-            <div class="toggle">
-              <input
-                id="enable-enable-global-shortcut"
-                v-model="enableGlobalShortcut"
-                type="checkbox"
-                name="enable-enable-global-shortcut"
-              />
-              <label for="enable-enable-global-shortcut"></label>
-            </div>
-          </div>
-        </div>
-        <div
-          id="shortcut-table"
-          :class="{ 'global-disabled': !enableGlobalShortcut }"
-          tabindex="0"
-          @keydown="handleShortcutKeydown"
-        >
-          <div class="row row-head">
-            <div class="col">功能</div>
-            <div class="col">快捷键</div>
-            <div class="col">全局快捷键</div>
-          </div>
-          <div
-            v-for="shortcut in settings.shortcuts"
-            :key="shortcut.id"
-            class="row"
-          >
-            <div class="col">{{ shortcut.name }}</div>
-            <div class="col">
-              <div
-                class="keyboard-input"
-                :class="{
-                  active:
-                    shortcutInput.id === shortcut.id &&
-                    shortcutInput.type === 'shortcut',
-                }"
-                @click.stop="readyToRecordShortcut(shortcut.id, 'shortcut')"
-              >
-                {{
-                  shortcutInput.id === shortcut.id &&
-                  shortcutInput.type === 'shortcut' &&
-                  recordedShortcutComputed !== ''
-                    ? formatShortcut(recordedShortcutComputed)
-                    : formatShortcut(shortcut.shortcut)
-                }}
-              </div>
-            </div>
-            <div class="col">
-              <div
-                class="keyboard-input"
-                :class="{
-                  active:
-                    shortcutInput.id === shortcut.id &&
-                    shortcutInput.type === 'globalShortcut' &&
-                    enableGlobalShortcut,
-                }"
-                @click.stop="
-                  readyToRecordShortcut(shortcut.id, 'globalShortcut')
-                "
-                >{{
-                  shortcutInput.id === shortcut.id &&
-                  shortcutInput.type === 'globalShortcut' &&
-                  recordedShortcutComputed !== ''
-                    ? formatShortcut(recordedShortcutComputed)
-                    : formatShortcut(shortcut.globalShortcut)
-                }}</div
-              >
-            </div>
-          </div>
-          <button
-            class="restore-default-shortcut"
-            @click="restoreDefaultShortcuts"
-            >恢复默认快捷键</button
-          >
-        </div>
-      </div>
-
       <div class="footer">
-        <p class="author"
+        <!-- <p class="author"
           >MADE BY
           <a href="http://github.com/qier222" target="_blank">QIER222</a></p
         >
-        <p class="version">v{{ version }}</p>
+        <p class="version">v{{ version }}</p> -->
 
-        <a
-          v-if="!isElectron"
-          href="https://vercel.com/?utm_source=ohmusic&utm_campaign=oss"
-        >
+        <a href="https://vercel.com/?utm_source=ohmusic&utm_campaign=oss">
           <img
             height="36"
             src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg"
@@ -715,11 +285,6 @@ import { auth as lastfmAuth } from '@/api/lastfm';
 import { changeAppearance, bytesToSize } from '@/utils/common';
 import { countDBSize, clearDB } from '@/utils/db';
 import pkg from '../../package.json';
-
-const electron =
-  process.env.IS_ELECTRON === true ? window.require('electron') : null;
-const ipcRenderer =
-  process.env.IS_ELECTRON === true ? electron.ipcRenderer : null;
 
 const validShortcutCodes = ['=', '-', '~', '[', ']', ';', "'", ',', '.', '/'];
 
@@ -747,15 +312,7 @@ export default {
   },
   computed: {
     ...mapState(['player', 'settings', 'data', 'lastfm']),
-    isElectron() {
-      return process.env.IS_ELECTRON;
-    },
-    isMac() {
-      return /macintosh|mac os x/i.test(navigator.userAgent);
-    },
-    isLinux() {
-      return process.platform === 'linux';
-    },
+
     version() {
       return pkg.version;
     },
@@ -1051,10 +608,6 @@ export default {
       set(value) {
         let config = this.settings.proxyConfig || {};
         config.protocol = value;
-        if (value === 'noProxy') {
-          ipcRenderer.send('removeProxy');
-          this.showToast('已关闭代理');
-        }
         this.$store.commit('updateSettings', {
           key: 'proxyConfig',
           value: config,
@@ -1185,11 +738,9 @@ export default {
   },
   created() {
     this.countDBSize('tracks');
-    if (process.env.IS_ELECTRON) this.getAllOutputDevices();
   },
   activated() {
     this.countDBSize('tracks');
-    if (process.env.IS_ELECTRON) this.getAllOutputDevices();
   },
   methods: {
     ...mapActions(['showToast']),
@@ -1249,20 +800,11 @@ export default {
       localStorage.removeItem('lastfm');
       this.$store.commit('updateLastfm', {});
     },
-    sendProxyConfig() {
-      if (this.proxyProtocol === 'noProxy') return;
-      const config = this.settings.proxyConfig;
-      if (
-        config.server === '' ||
-        !config.port ||
-        config.protocol === 'noProxy'
-      ) {
-        ipcRenderer.send('removeProxy');
-      } else {
-        ipcRenderer.send('setProxy', config);
-      }
-      this.showToast('已更新代理设置');
-    },
+    // sendProxyConfig() {
+    //   if (this.proxyProtocol === 'noProxy') return;
+    //   const config = this.settings.proxyConfig;
+    //   this.showToast('已更新代理设置');
+    // },
     clickOutside() {
       this.exitRecordShortcut();
     },
@@ -1294,7 +836,6 @@ export default {
       }
       this.shortcutInput = { id, type, recording: true };
       this.recordedShortcut = [];
-      ipcRenderer.send('switchGlobalShortcutStatusTemporary', 'disable');
     },
     handleShortcutKeydown(e) {
       if (this.shortcutInput.recording === false) return;
@@ -1326,7 +867,6 @@ export default {
         shortcut: this.recordedShortcutComputed,
       };
       this.$store.commit('updateShortcut', payload);
-      ipcRenderer.send('updateShortcut', payload);
       this.showToast('快捷键已保存');
       this.recordedShortcut = [];
     },
@@ -1334,11 +874,9 @@ export default {
       if (this.shortcutInput.recording === false) return;
       this.shortcutInput = { id: '', type: '', recording: false };
       this.recordedShortcut = [];
-      ipcRenderer.send('switchGlobalShortcutStatusTemporary', 'enable');
     },
     restoreDefaultShortcuts() {
       this.$store.commit('restoreDefaultShortcuts');
-      ipcRenderer.send('restoreDefaultShortcuts');
     },
   },
 };

@@ -7,7 +7,6 @@ import { getMP3, getTrackDetail, scrobble } from '@/api/track';
 import store from '@/store';
 import { isAccountLoggedIn } from '@/utils/auth';
 import { cacheTrackSource, getTrackSource } from '@/utils/db';
-import { isCreateMpris, isCreateTray } from '@/utils/platform';
 import { Howl, Howler } from 'howler';
 import shuffle from 'lodash/shuffle';
 import { decode as base642Buffer } from '@/utils/base64';
@@ -23,10 +22,6 @@ const UNPLAYABLE_CONDITION = {
   PLAY_PREV_TRACK: 'playPrevTrack',
 };
 
-const electron =
-  process.env.IS_ELECTRON === true ? window.require('electron') : null;
-const ipcRenderer =
-  process.env.IS_ELECTRON === true ? electron.ipcRenderer : null;
 const delay = ms =>
   new Promise(resolve => {
     setTimeout(() => {
@@ -41,18 +36,9 @@ const excludeSaveKeys = [
 
 function setTitle(track) {
   document.title = track
-    ? `${track.name} · ${track.ar[0].name} - YesPlayMusic`
-    : 'YesPlayMusic';
-  if (isCreateTray) {
-    ipcRenderer?.send('updateTrayTooltip', document.title);
-  }
+    ? `${track.name} · ${track.ar[0].name} - VueMusic`
+    : 'VueMusic';
   store.commit('updateTitle', document.title);
-}
-
-function setTrayLikeState(isLiked) {
-  if (isCreateTray) {
-    ipcRenderer?.send('updateTrayLikeState', isLiked);
-  }
 }
 
 export default class {
@@ -100,8 +86,8 @@ export default class {
     // init
     this._init();
 
-    window.yesplaymusic = {};
-    window.yesplaymusic.player = this;
+    window.vuemusic = {};
+    window.vuemusic.player = this;
   }
 
   get repeatMode() {
@@ -234,9 +220,6 @@ export default class {
   }
   _setPlaying(isPlaying) {
     this._playing = isPlaying;
-    if (isCreateTray) {
-      ipcRenderer?.send('updateTrayPlayState', this._playing);
-    }
   }
   _setIntervals() {
     // 同步播放进度
@@ -246,9 +229,6 @@ export default class {
       if (this._howler === null) return;
       this._progress = this._howler.seek();
       localStorage.setItem('playerCurrentTrackTime', this._progress);
-      if (isCreateMpris) {
-        ipcRenderer?.send('playerCurrentTrackTime', this._progress);
-      }
     }, 1000);
   }
   _getNextTrack() {
@@ -269,7 +249,6 @@ export default class {
         return [this.list[0], 0];
       }
     }
-
     // 返回 [trackID, index]
     return [this.list[next], next];
   }
@@ -357,7 +336,6 @@ export default class {
       if (this._currentTrack.name) {
         setTitle(this._currentTrack);
       }
-      setTrayLikeState(store.state.liked.songs.includes(this.currentTrack.id));
     }
     this.setOutputDevice();
   }
@@ -405,10 +383,7 @@ export default class {
   async _getAudioSourceFromUnblockMusic(track) {
     console.debug(`[debug][Player.js] _getAudioSourceFromUnblockMusic`);
 
-    if (
-      process.env.IS_ELECTRON !== true ||
-      store.state.settings.enableUnblockNeteaseMusic === false
-    ) {
+    if (store.state.settings.enableUnblockNeteaseMusic === false) {
       return null;
     }
 
@@ -433,44 +408,45 @@ export default class {
     };
 
     /** @type {import("@unblockneteasemusic/rust-napi").RetrievedSongInfo | null} */
-    const retrieveSongInfo = await ipcRenderer.invoke(
-      'unblock-music',
-      store.state.settings.unmSource,
-      track,
-      /** @type {import("@unblockneteasemusic/rust-napi").Context} */ ({
-        enableFlac: store.state.settings.unmEnableFlac || null,
-        proxyUri: store.state.settings.unmProxyUri || null,
-        searchMode: determineSearchMode(store.state.settings.unmSearchMode),
-        config: {
-          'joox:cookie': store.state.settings.unmJooxCookie || null,
-          'qq:cookie': store.state.settings.unmQQCookie || null,
-          'ytdl:exe': store.state.settings.unmYtDlExe || null,
-        },
-      })
-    );
+    // const retrieveSongInfo = await ipcRenderer.invoke(
+    //   'unblock-music',
+    //   store.state.settings.unmSource,
+    //   track,
+    //   /** @type {import("@unblockneteasemusic/rust-napi").Context} */ ({
+    //     enableFlac: store.state.settings.unmEnableFlac || null,
+    //     proxyUri: store.state.settings.unmProxyUri || null,
+    //     searchMode: determineSearchMode(store.state.settings.unmSearchMode),
+    //     config: {
+    //       'joox:cookie': store.state.settings.unmJooxCookie || null,
+    //       'qq:cookie': store.state.settings.unmQQCookie || null,
+    //       'ytdl:exe': store.state.settings.unmYtDlExe || null,
+    //     },
+    //   })
+    // );
 
-    if (store.state.settings.automaticallyCacheSongs && retrieveSongInfo?.url) {
-      // 对于来自 bilibili 的音源
-      // retrieveSongInfo.url 是音频数据的base64编码
-      // 其他音源为实际url
-      const url =
-        retrieveSongInfo.source === 'bilibili'
-          ? `data:application/octet-stream;base64,${retrieveSongInfo.url}`
-          : retrieveSongInfo.url;
-      cacheTrackSource(track, url, 128000, `unm:${retrieveSongInfo.source}`);
-    }
+    // if (store.state.settings.automaticallyCacheSongs && retrieveSongInfo?.url) {
+    //   // 对于来自 bilibili 的音源
+    //   // retrieveSongInfo.url 是音频数据的base64编码
+    //   // 其他音源为实际url
+    //   const url =
+    //     retrieveSongInfo.source === 'bilibili'
+    //       ? `data:application/octet-stream;base64,${retrieveSongInfo.url}`
+    //       : retrieveSongInfo.url;
+    //   cacheTrackSource(track, url, 128000, `unm:${retrieveSongInfo.source}`);
+    // }
 
-    if (!retrieveSongInfo) {
-      return null;
-    }
+    // if (!retrieveSongInfo) {
+    //   return null;
+    // }
 
-    if (retrieveSongInfo.source !== 'bilibili') {
-      return retrieveSongInfo.url;
-    }
+    // if (retrieveSongInfo.source !== 'bilibili') {
+    //   return retrieveSongInfo.url;
+    // }
 
-    const buffer = base642Buffer(retrieveSongInfo.url);
-    return this._getAudioSourceBlobURL(buffer);
+    // const buffer = base642Buffer(retrieveSongInfo.url);
+    // return this._getAudioSourceBlobURL(buffer);
   }
+
   _getAudioSource(track) {
     return this._getAudioSourceFromCache(String(track.id))
       .then(source => {
@@ -615,9 +591,6 @@ export default class {
     };
 
     navigator.mediaSession.metadata = new window.MediaMetadata(metadata);
-    if (isCreateMpris) {
-      ipcRenderer?.send('metadata', metadata);
-    }
   }
   _updateMediaSessionPositionState() {
     if ('mediaSession' in navigator === false) {
@@ -662,24 +635,16 @@ export default class {
       });
   }
   _playDiscordPresence(track, seekTime = 0) {
-    if (
-      process.env.IS_ELECTRON !== true ||
-      store.state.settings.enableDiscordRichPresence === false
-    ) {
+    if (store.state.settings.enableDiscordRichPresence === false) {
       return null;
     }
     let copyTrack = { ...track };
     copyTrack.dt -= seekTime * 1000;
-    ipcRenderer?.send('playDiscordPresence', copyTrack);
   }
   _pauseDiscordPresence(track) {
-    if (
-      process.env.IS_ELECTRON !== true ||
-      store.state.settings.enableDiscordRichPresence === false
-    ) {
+    if (store.state.settings.enableDiscordRichPresence === false) {
       return null;
     }
-    ipcRenderer?.send('pauseDiscordPresence', track);
   }
   _playNextTrack(isPersonal) {
     if (isPersonal) {
@@ -918,16 +883,6 @@ export default class {
     }
   }
 
-  sendSelfToIpcMain() {
-    if (process.env.IS_ELECTRON !== true) return false;
-    let liked = store.state.liked.songs.includes(this.currentTrack.id);
-    ipcRenderer?.send('player', {
-      playing: this.playing,
-      likedCurrentTrack: liked,
-    });
-    setTrayLikeState(liked);
-  }
-
   switchRepeatMode() {
     if (this._repeatMode === 'on') {
       this.repeatMode = 'one';
@@ -936,15 +891,9 @@ export default class {
     } else {
       this.repeatMode = 'on';
     }
-    if (isCreateMpris) {
-      ipcRenderer?.send('switchRepeatMode', this.repeatMode);
-    }
   }
   switchShuffle() {
     this.shuffle = !this.shuffle;
-    if (isCreateMpris) {
-      ipcRenderer?.send('switchShuffle', this.shuffle);
-    }
   }
   switchReversed() {
     this.reversed = !this.reversed;

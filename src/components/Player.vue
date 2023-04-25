@@ -182,7 +182,7 @@ import '@/assets/css/slider.css';
 
 import ButtonIcon from '@/components/ButtonIcon.vue';
 import VueSlider from 'vue-slider-component';
-import { goToListSource, hasListSource } from '@/utils/playList';
+import { goToListSource, hasListSource } from '@/utils/playlist';
 
 export default {
   name: 'Player',

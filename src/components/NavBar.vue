@@ -1,8 +1,6 @@
 <template>
   <div>
-    <nav :class="{ 'has-custom-titlebar': hasCustomTitlebar }">
-      <Win32Titlebar v-if="enableWin32Titlebar" />
-      <LinuxTitlebar v-if="enableLinuxTitlebar" />
+    <nav class="has-custom-titlebar">
       <div class="navigation-buttons">
         <button-icon @click.native="go('back')"
           ><svg-icon icon-class="arrow-left"
@@ -81,17 +79,12 @@ import { isLooseLoggedIn, doLogout } from '@/utils/auth';
 // import icons for win32 title bar
 // icons by https://github.com/microsoft/vscode-codicons
 import 'vscode-codicons/dist/codicon.css';
-
-import Win32Titlebar from '@/components/Win32Titlebar.vue';
-import LinuxTitlebar from '@/components/LinuxTitlebar.vue';
 import ContextMenu from '@/components/ContextMenu.vue';
 import ButtonIcon from '@/components/ButtonIcon.vue';
 
 export default {
   name: 'Navbar',
   components: {
-    Win32Titlebar,
-    LinuxTitlebar,
     ButtonIcon,
     ContextMenu,
   },
@@ -100,8 +93,6 @@ export default {
       inputFocus: false,
       langs: ['zh-CN', 'zh-TW', 'en', 'tr'],
       keywords: '',
-      enableWin32Titlebar: false,
-      enableLinuxTitlebar: false,
     };
   },
   computed: {
@@ -114,20 +105,8 @@ export default {
         ? `${this.data?.user?.avatarUrl}?param=512y512`
         : 'http://s4.music.126.net/style/web2/img/default/default_avatar.jpg?param=60y60';
     },
-    hasCustomTitlebar() {
-      return this.enableWin32Titlebar || this.enableLinuxTitlebar;
-    },
   },
-  created() {
-    if (process.platform === 'win32') {
-      this.enableWin32Titlebar = true;
-    } else if (
-      process.platform === 'linux' &&
-      this.settings.linuxEnableCustomTitlebar
-    ) {
-      this.enableLinuxTitlebar = true;
-    }
-  },
+  created() {},
   methods: {
     go(where) {
       if (where === 'back') this.$router.go(-1);
@@ -158,14 +137,10 @@ export default {
       this.$router.push({ name: 'settings' });
     },
     toGitHub() {
-      window.open('https://github.com/qier222/YesPlayMusic');
+      window.open('https://github.com/magnum-zx');
     },
     toLogin() {
-      if (process.env.IS_ELECTRON === true) {
-        this.$router.push({ name: 'loginAccount' });
-      } else {
-        this.$router.push({ name: 'login' });
-      }
+      this.$router.push({ name: 'login' });
     },
   },
 };
