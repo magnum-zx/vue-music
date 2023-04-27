@@ -263,7 +263,7 @@ import ButtonIcon from '@/components/ButtonIcon.vue';
 import * as Vibrant from 'node-vibrant/dist/vibrant.worker.min.js';
 import Color from 'color';
 import { isAccountLoggedIn } from '@/utils/auth';
-import { hasListSource, getListSourcePath } from '@/utils/playList';
+import { hasListSource, getListSourcePath } from '@/utils/playlist';
 import locale from '@/locale';
 
 export default {

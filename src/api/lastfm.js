@@ -22,9 +22,7 @@ const sign = params => {
 };
 
 export function auth() {
-  const url = process.env.IS_ELECTRON
-    ? `https://www.last.fm/api/auth/?api_key=${apiKey}&cb=${baseUrl}/#/lastfm/callback`
-    : `https://www.last.fm/api/auth/?api_key=${apiKey}&cb=${baseUrl}/lastfm/callback`;
+  const url = `https://www.last.fm/api/auth/?api_key=${apiKey}&cb=${baseUrl}/lastfm/callback`;
   window.open(url);
 }
 

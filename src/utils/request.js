@@ -16,15 +16,15 @@ const service = axios.create({
 service.interceptors.request.use(function (config) {
   if (!config.params) config.params = {};
   if (baseURL.length) {
-    if (baseURL[0] !== '/' && !process.env.IS_ELECTRON) {
+    if (baseURL[0] !== '/') {
       config.params.cookie = `MUSIC_U=${getCookie('MUSIC_U')};`;
     }
   } else {
     console.error("You must set up the baseURL in the service's config");
   }
 
-  if (!process.env.IS_ELECTRON && !config.url.includes('/login')) {
-    config.params.realIP = '211.161.244.70';
+  if (!config.url.includes('/login')) {
+    config.params.realIP = '116.25.146.177';
   }
 
   if (process.env.VUE_APP_REAL_IP) {
@@ -61,11 +61,7 @@ service.interceptors.response.use(
       doLogout();
 
       // 導向登入頁面
-      if (process.env.IS_ELECTRON === true) {
-        router.push({ name: 'loginAccount' });
-      } else {
-        router.push({ name: 'login' });
-      }
+      router.push({ name: 'login' });
     }
   }
 );

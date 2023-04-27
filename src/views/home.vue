@@ -73,7 +73,7 @@ import { toplists } from '@/api/playlist';
 import { toplistOfArtists } from '@/api/artist';
 import { newAlbums } from '@/api/album';
 import { byAppleMusic } from '@/utils/staticData';
-import { getRecommendPlayList } from '@/utils/playList';
+import { getRecommendPlayList } from '@/utils/playlist.js';
 import NProgress from 'nprogress';
 import { mapState } from 'vuex';
 import CoverRow from '@/components/CoverRow.vue';

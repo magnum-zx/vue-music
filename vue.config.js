@@ -91,7 +91,5 @@ module.exports = {
     ]);
   },
   // 添加插件的配置
-  pluginOptions: {
-    // electron-builder的配置文件
-  },
+  pluginOptions: {},
 };

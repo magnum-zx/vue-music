@@ -68,7 +68,7 @@ import { mapState, mapMutations } from 'vuex';
 import NProgress from 'nprogress';
 import { topPlaylist, highQualityPlaylist, toplists } from '@/api/playlist';
 import { playlistCategories } from '@/utils/staticData';
-import { getRecommendPlayList } from '@/utils/playList';
+import { getRecommendPlayList } from '@/utils/playlist';
 
 import ButtonTwoTone from '@/components/ButtonTwoTone.vue';
 import CoverRow from '@/components/CoverRow.vue';

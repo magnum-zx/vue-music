@@ -74,7 +74,6 @@ export default {
     },
   },
   created() {
-    // if (this.isElectron) ipcRenderer(this);
     window.addEventListener('keydown', this.handleKeydown);
     this.fetchData();
   },

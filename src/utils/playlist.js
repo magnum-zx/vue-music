@@ -4,8 +4,8 @@ import {
   recommendPlaylist,
   dailyRecommendPlaylist,
   getPlaylistDetail,
-} from '@/api/playlist';
-import { isAccountLoggedIn } from '@/utils/auth';
+} from '@/api/playlist.js';
+import { isAccountLoggedIn } from '@/utils/auth.js';
 
 export function hasListSource() {
   return !state.player.isPersonalFM && state.player.playlistSource.id !== 0;

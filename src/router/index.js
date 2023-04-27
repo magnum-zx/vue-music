@@ -135,7 +135,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: process.env.IS_ELECTRON ? 'hash' : 'history',
+  mode: 'history',
   routes,
 });
 
@@ -157,11 +157,7 @@ router.beforeEach((to, from, next) => {
     if (isLooseLoggedIn()) {
       next();
     } else {
-      if (process.env.IS_ELECTRON === true) {
-        next({ path: '/login/account' });
-      } else {
-        next({ path: '/login' });
-      }
+      next({ path: '/login' });
     }
   } else {
     next();
