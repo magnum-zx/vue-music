@@ -1,6 +1,12 @@
 # vue-music
-A music website implemented by Vue2 framework
+Plan to refactor this Music App with Vue3
 
+## Tech Stack
+- Vue3.0
+- Vite
+- TypeScript
+- TailwindCSS or UnoCSS
+- ...
 ## Project setup
 ```
 yarn install
